@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "node.h"
 #include "DynamicArray.h"
 #include "PriorityQueue.h"
 #include "HuffmanCoding.h"
-#include "test.h"
 
 
 int main(int argc, char *argv[]) {
-	encode("test.txt");
+	encode("test.txt", "compressed.huf");
+
 	return 0;
 }
