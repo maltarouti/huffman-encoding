@@ -21,7 +21,7 @@ queue* count_frequency(char path[]){
 	char current = fgetc(ptr);
 	while(current != EOF){
 		int character_index = find_index(characters, current);
-		
+
 		if(character_index != -1){
 			int frequency = get_frequency(characters, current) + 1;
 			update_frequency(characters, character_index, frequency);
@@ -29,7 +29,7 @@ queue* count_frequency(char path[]){
 		else{
 			append(characters, current);
 		}				
-		
+
 		current = fgetc(ptr);
 	}
 
@@ -43,7 +43,7 @@ queue* count_frequency(char path[]){
 	fclose(ptr);
 	characters = NULL;
 	free(characters);
-	return q;	
+	return q;
 }
 
 
@@ -73,20 +73,21 @@ char* get_path(char data,
 			   char path[]){
 
 	if(root->data == data){
+		printf("%s\n", path);
 		return path;
 	}
-	
+
 	if(root->left != NULL){
 		char left[] = " ";
 		strcpy(left, path);
-		strcpy(left, "0");
+		strcat(left, "0");
 		get_path(data, root->left, left);
 	}
-	
+
 	if(root->right != NULL){
 		char right[] = " ";
 		strcpy(right, path);
-		strcpy(right, "1");
+		strcat(right, "1");
 		get_path(data, root->right, right);
 	}
 }
@@ -101,7 +102,7 @@ void compress(char path[],
 	
 	while(current != EOF){
 		char path[] = " ";
-		
+		get_path(current, root, path);
 		current = fgetc(ptr);
 	}
 }
