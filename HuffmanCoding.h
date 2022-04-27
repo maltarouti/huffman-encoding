@@ -68,27 +68,26 @@ node* build_tree(queue* q){
 }
 
 
-char* get_path(char data,
+void get_path(char data,
 			   node* root,
-			   char path[]){
-
+			   char path[],
+			   char buffer[]){
 	if(root->data == data){
-		printf("%s\n", path);
-		return path;
+		strcpy(buffer, path);
 	}
 
 	if(root->left != NULL){
-		char left[] = " ";
+		char left[] = "";
 		strcpy(left, path);
 		strcat(left, "0");
-		get_path(data, root->left, left);
+		get_path(data, root->left, left, buffer);
 	}
 
 	if(root->right != NULL){
-		char right[] = " ";
+		char right[] = "";
 		strcpy(right, path);
 		strcat(right, "1");
-		get_path(data, root->right, right);
+		get_path(data, root->right, right, buffer);
 	}
 }
 
@@ -100,9 +99,18 @@ void compress(char path[],
 	FILE* ptr = _read_file(path);
 	char current = fgetc(ptr);
 	
+	char byte[8];
+	int count = 0;
+	
 	while(current != EOF){
-		char path[] = " ";
-		get_path(current, root, path);
+		char buffer[] = "";
+		get_path(current, root, "", buffer);
+		printf("%s\n", buffer);
+		
+		// Save the current path of the current character to the buffer
+		// Transfer the buffer to the byte until we have nothing left
+		// Write the byte if its complete
+		
 		current = fgetc(ptr);
 	}
 }
@@ -133,7 +141,7 @@ int encode(char path[], char destination[]){
 	queue* q = count_frequency(path);
 	node* root = build_tree(q);
 	compress(path, destination, root);
-//	print_tree(root, 0);
+	print_tree(root, 0);
 	return 0;
 }
 	
