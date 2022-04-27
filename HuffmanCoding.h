@@ -1,5 +1,6 @@
 
 
+
 FILE* _read_file(char path[]){
 	FILE* ptr;
 	ptr = fopen(path, "r");
@@ -67,6 +68,30 @@ node* build_tree(queue* q){
 }
 
 
+char* get_path(char data,
+			   node* root,
+			   char path[]){
+
+	if(root->data == data){
+		return path;
+	}
+	
+	if(root->left != NULL){
+		char left[] = " ";
+		strcpy(left, path);
+		strcpy(left, "0");
+		get_path(data, root->left, left);
+	}
+	
+	if(root->right != NULL){
+		char right[] = " ";
+		strcpy(right, path);
+		strcpy(right, "1");
+		get_path(data, root->right, right);
+	}
+}
+
+
 void compress(char path[],
 			  char destination[],
 			  node* root){
@@ -75,9 +100,9 @@ void compress(char path[],
 	char current = fgetc(ptr);
 	
 	while(current != EOF){
-	
-	// TODO: Convert chars to bits and write them to a file
+		char path[] = " ";
 		
+		current = fgetc(ptr);
 	}
 }
 
@@ -91,7 +116,7 @@ void print_tree(node* root, int level){
 		for(i=0; i<indent; i++){
 			strcat(prefix, " ");
 		}
-		if(root->data == NULL){
+		if(root->data){
 			strcat(prefix, "|-");
 		}
 		else{
@@ -107,7 +132,7 @@ int encode(char path[], char destination[]){
 	queue* q = count_frequency(path);
 	node* root = build_tree(q);
 	compress(path, destination, root);
-			
+//	print_tree(root, 0);
 	return 0;
 }
 	
