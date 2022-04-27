@@ -1,4 +1,4 @@
-Makefile.win
+*.win
 *.exe
 *.o
 *.dev
