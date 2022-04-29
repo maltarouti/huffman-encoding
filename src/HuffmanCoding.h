@@ -71,7 +71,7 @@ void get_path(char data,
 			   node* root,
 			   char path[],
 			   char buffer[]){
-	if(root->data == data){
+	if(root->data == data && root->is_leaf == 1){
 		strcpy(buffer, path);
 	}
 
@@ -95,12 +95,19 @@ void compress(char source_path[],
 			  char destination_path[],
 			  node* root){
 		
+	// Reading the source
 	FILE* source = _open_file(source_path, "rb");
 	char current = fgetc(source);
 	
+	// Writing the header of the compressed file
+	// TODO: ...
+	// 4-bytes: total number of chars in the compressed file
+	// 4-bytes: total number of chars in the header
+	// 4-bytes: total number of chars in uncompressed file
+	// 12-bytes: For the huffman tree
+	// Writing the compressed file
 	char byte = 0;
 	int count = 0;
-	
 	while(current != EOF){
 		char buffer[] = "";
 		get_path(current, root, "", buffer);
