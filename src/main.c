@@ -6,9 +6,7 @@
 #include "PriorityQueue.h"
 #include "HuffmanCoding.h"
 
-
 int main(int argc, char *argv[]) {
-	encode("test.txt", "compressed.huf");
-
+	encode("tests/test.png", "tests/test.huf");
 	return 0;
 }

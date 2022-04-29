@@ -1,19 +1,18 @@
 
 
-
-FILE* _read_file(char path[]){
+FILE* _open_file(char path[], char mode[]){
 	FILE* ptr;
-	ptr = fopen(path, "r");
+	ptr = fopen(path, mode);
 	
 	if(ptr == NULL){
 		printf("File could not be opened\n");
+		return NULL;
 	}
 	return ptr;	
 }
 
-
 queue* count_frequency(char path[]){
-	FILE* ptr = _read_file(path);
+	FILE* ptr = _open_file(path, "rb");
 	queue *q = create_queue();
 	
 	array* characters = create_array();
@@ -92,27 +91,49 @@ void get_path(char data,
 }
 
 
-void compress(char path[],
-			  char destination[],
+void compress(char source_path[],
+			  char destination_path[],
 			  node* root){
-
-	FILE* ptr = _read_file(path);
-	char current = fgetc(ptr);
+		
+	FILE* source = _open_file(source_path, "rb");
+	char current = fgetc(source);
 	
-	char byte[8];
+	char byte = 0;
 	int count = 0;
 	
 	while(current != EOF){
 		char buffer[] = "";
 		get_path(current, root, "", buffer);
-		printf("%s\n", buffer);
 		
-		// Save the current path of the current character to the buffer
-		// Transfer the buffer to the byte until we have nothing left
-		// Write the byte if its complete
-		
-		current = fgetc(ptr);
+		int i;
+		int buffer_size = sizeof(buffer)/sizeof(char);
+		for(i=0; i<buffer_size; i++){
+			// if the byte is full
+			if(count == 8){
+				// Write the byte to the file
+				FILE* destination = _open_file(destination_path, "ab");
+				fwrite(&byte, sizeof(char*), 1, destination);
+				fclose(destination);
+				
+				// Reset the byte
+				count = 0;
+				byte = 0;
+			}
+			
+			// Add to the byte
+			if(buffer[i] == '1'){
+				byte |= 1;
+				byte <<= 1;
+				count++;
+			}
+			else{
+				byte <<=1;
+				count++;
+			}
+		}
+		current = fgetc(source);
 	}
+	fclose(source);
 }
 
 void print_tree(node* root, int level){
@@ -141,7 +162,6 @@ int encode(char path[], char destination[]){
 	queue* q = count_frequency(path);
 	node* root = build_tree(q);
 	compress(path, destination, root);
-	print_tree(root, 0);
 	return 0;
 }
 	
