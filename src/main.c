@@ -7,6 +7,7 @@
 #include "HuffmanCoding.h"
 
 int main(int argc, char *argv[]) {
-	encode("tests/test.png", "tests/test.huf");
+	encode("test.txt", "test.huf");
 	return 0;
 }
+

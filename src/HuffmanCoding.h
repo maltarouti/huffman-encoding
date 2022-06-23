@@ -99,27 +99,20 @@ void compress(char source_path[],
 	FILE* source = _open_file(source_path, "rb");
 	char current = fgetc(source);
 	
-	// Writing the header of the compressed file
-	// TODO: ...
-	// 4-bytes: total number of chars in the compressed file
-	// 4-bytes: total number of chars in the header
-	// 4-bytes: total number of chars in uncompressed file
-	// 12-bytes: For the huffman tree
 	// Writing the compressed file
 	char byte = 0;
 	int count = 0;
 	while(current != EOF){
 		char buffer[] = "";
 		get_path(current, root, "", buffer);
-		
 		int i;
-		int buffer_size = sizeof(buffer)/sizeof(char);
+		int buffer_size = strlen(buffer);
 		for(i=0; i<buffer_size; i++){
 			// if the byte is full
 			if(count == 8){
 				// Write the byte to the file
 				FILE* destination = _open_file(destination_path, "ab");
-				fwrite(&byte, sizeof(char*), 1, destination);
+				fwrite(&byte, sizeof(char), 1, destination);
 				fclose(destination);
 				
 				// Reset the byte
@@ -128,7 +121,7 @@ void compress(char source_path[],
 			}
 			
 			// Add to the byte
-			if(buffer[i] == '1'){
+			if(buffer[i]){
 				byte |= 1;
 				byte <<= 1;
 				count++;
